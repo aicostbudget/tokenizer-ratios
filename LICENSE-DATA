@@ -1,0 +1,13 @@
+Creative Commons Attribution 4.0 International
+
+The samples in data/ and the measured results in results/ are licensed under the Creative Commons
+Attribution 4.0 International License, with one exception below.
+
+You are free to share and adapt them for any purpose, including commercial use, provided that appropriate
+attribution is given, for example: "Tokenizer ratios by AICostBudget, https://github.com/aicostbudget/tokenizer-ratios".
+
+License text: https://creativecommons.org/licenses/by/4.0/
+
+Exception: samples whose "source" is "python-stdlib-docstring" or "python-stdlib-source" are excerpts of the
+CPython 3.11 standard library and remain under the Python Software Foundation License Version 2
+(https://docs.python.org/3/license.html). Copyright (c) 2001 Python Software Foundation; All Rights Reserved.

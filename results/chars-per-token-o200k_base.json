@@ -1,0 +1,117 @@
+{
+  "encoding": "o200k_base",
+  "tiktoken": "0.14.0",
+  "samples": 951,
+  "categories": {
+    "blog": {
+      "samples": 416,
+      "characters": 133237,
+      "tokens": 26783,
+      "charsPerToken": 4.975,
+      "wordsPerToken": 0.808,
+      "charsDividedBy4Ratio": 1.244,
+      "minCharsPerToken": 3.187,
+      "maxCharsPerToken": 6.326
+    },
+    "docs": {
+      "samples": 354,
+      "characters": 294256,
+      "tokens": 67241,
+      "charsPerToken": 4.376,
+      "wordsPerToken": 0.655,
+      "charsDividedBy4Ratio": 1.094,
+      "minCharsPerToken": 3.151,
+      "maxCharsPerToken": 5.374
+    },
+    "code": {
+      "samples": 53,
+      "characters": 132500,
+      "tokens": 31652,
+      "charsPerToken": 4.186,
+      "wordsPerToken": 0.452,
+      "charsDividedBy4Ratio": 1.047,
+      "minCharsPerToken": 2.289,
+      "maxCharsPerToken": 5.447
+    },
+    "ru": {
+      "samples": 4,
+      "characters": 396,
+      "tokens": 102,
+      "charsPerToken": 3.882,
+      "wordsPerToken": 0.549,
+      "charsDividedBy4Ratio": 0.971,
+      "minCharsPerToken": 3.519,
+      "maxCharsPerToken": 4.154
+    },
+    "json": {
+      "samples": 20,
+      "characters": 118654,
+      "tokens": 56274,
+      "charsPerToken": 2.109,
+      "wordsPerToken": 0.244,
+      "charsDividedBy4Ratio": 0.527,
+      "minCharsPerToken": 1.727,
+      "maxCharsPerToken": 2.824
+    },
+    "csv": {
+      "samples": 40,
+      "characters": 113274,
+      "tokens": 54077,
+      "charsPerToken": 2.095,
+      "wordsPerToken": 0.09,
+      "charsDividedBy4Ratio": 0.524,
+      "minCharsPerToken": 1.602,
+      "maxCharsPerToken": 3.925
+    },
+    "emoji": {
+      "samples": 15,
+      "characters": 1707,
+      "tokens": 821,
+      "charsPerToken": 2.079,
+      "wordsPerToken": 0.302,
+      "charsDividedBy4Ratio": 0.52,
+      "minCharsPerToken": 1.852,
+      "maxCharsPerToken": 2.516
+    },
+    "ko": {
+      "samples": 4,
+      "characters": 173,
+      "tokens": 98,
+      "charsPerToken": 1.765,
+      "wordsPerToken": 0.459,
+      "charsDividedBy4Ratio": 0.441,
+      "minCharsPerToken": 1.5,
+      "maxCharsPerToken": 2.105
+    },
+    "ids": {
+      "samples": 30,
+      "characters": 19638,
+      "tokens": 12675,
+      "charsPerToken": 1.549,
+      "wordsPerToken": 0.039,
+      "charsDividedBy4Ratio": 0.387,
+      "minCharsPerToken": 1.48,
+      "maxCharsPerToken": 1.601
+    },
+    "zh": {
+      "samples": 11,
+      "characters": 818,
+      "tokens": 598,
+      "charsPerToken": 1.368,
+      "wordsPerToken": 0.018,
+      "charsDividedBy4Ratio": 0.342,
+      "minCharsPerToken": 1.284,
+      "maxCharsPerToken": 1.523
+    },
+    "ja": {
+      "samples": 4,
+      "characters": 168,
+      "tokens": 125,
+      "charsPerToken": 1.344,
+      "wordsPerToken": 0.032,
+      "charsDividedBy4Ratio": 0.336,
+      "minCharsPerToken": 1.258,
+      "maxCharsPerToken": 1.531
+    }
+  }
+}

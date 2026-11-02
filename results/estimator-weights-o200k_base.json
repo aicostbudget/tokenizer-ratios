@@ -1,0 +1,43 @@
+{
+  "encoding": "o200k_base",
+  "tiktoken": "0.14.0",
+  "weights": {
+    "cjkChar": 0.73,
+    "otherScriptLetter": 0.28,
+    "latinWord": 0.91,
+    "longWordLetter": 0.22,
+    "digit": 0.66,
+    "asciiPunctuation": 0.56,
+    "otherSymbol": 1.53,
+    "whitespaceRun": 1.24,
+    "shortWord": 0.33,
+    "capitalizedWord": 0.62,
+    "camelBoundary": 1.41
+  },
+  "estimateOverActual": {
+    "blog": 1.016,
+    "code": 0.999,
+    "csv": 1.003,
+    "docs": 1.012,
+    "emoji": 1.013,
+    "ids": 1.003,
+    "ja": 0.992,
+    "json": 0.998,
+    "ko": 1.061,
+    "ru": 1.01,
+    "zh": 1.007
+  },
+  "holdoutEstimateOverActual": {
+    "blog": 1.008,
+    "code": 1.001,
+    "csv": 0.999,
+    "docs": 1.017,
+    "emoji": 1.023,
+    "ids": 0.97,
+    "ja": 0.938,
+    "json": 0.985,
+    "ko": 1.06,
+    "ru": 1.115,
+    "zh": 1.015
+  }
+}
