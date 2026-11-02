@@ -1,0 +1,14 @@
+{
+  "name": "tokenizer-ratios",
+  "private": true,
+  "type": "module",
+  "description": "Compare token estimators against OpenAI's o200k_base tokenizer on 951 samples.",
+  "scripts": {
+    "compare": "node scripts/compare_estimators.mjs"
+  },
+  "devDependencies": {
+    "js-tiktoken": "1.0.21",
+    "tokenx": "2.2.0"
+  },
+  "license": "MIT"
+}

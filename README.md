@@ -1,14 +1,63 @@
-# Tokenizer ratios: how many characters is a token?
+# How many characters is a token? Stop dividing by 4
 
 [![code: MIT](https://img.shields.io/badge/code-MIT-blue)](LICENSE-CODE)
 [![data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-blue)](LICENSE-DATA)
 
-Everyone says one token is about four characters. We wanted to know how far off that is, so we ran 951 text
-samples through OpenAI's `o200k_base` tokenizer (tiktoken 0.14.0) and counted.
+"One token is about four characters" is the rule everyone uses. We ran 951 text samples through OpenAI's
+`o200k_base` tokenizer (GPT-4o, GPT-4.1 and newer; tiktoken 0.14.0) and counted. The rule is fine for code,
+off by a quarter on plain English, and **misses half the tokens in JSON and CSV**. If you size context windows
+or price API calls with it, the JSON-heavy calls are the ones that blow your budget.
 
-Short version: it depends a lot on what the text is. Plain English fits about 5 characters in a token, so
-dividing by 4 overcounts it. JSON and CSV fit about 2, so the same rule misses roughly half their tokens.
-Chinese and Japanese come out at about 1.4.
+The good news: you don't need a tokenizer to do much better. [`estimate-tokens.js`](estimate-tokens.js) is a
+26-line function with no dependencies. Copy it into your project and it lands within about 2% of the real count
+on English, docs, code, CSV, JSON and Chinese.
+
+## Three estimators against the real count
+
+Estimate divided by the real `o200k_base` count, summed per content type. 1.000 is exact; 0.50 means you
+counted half the tokens you will pay for.
+
+| Content | Samples | characters ÷ 4 | [tokenx](https://github.com/johannschopplich/tokenx) 2.2.0 | estimate-tokens.js |
+|---|---:|---:|---:|---:|
+| English blog writing | 416 | 1.250 | 1.048 | 1.016 |
+| English technical docs | 354 | 1.097 | 1.031 | 1.012 |
+| Python source | 53 | 1.047 | 1.027 | 0.999 |
+| CSV | 40 | **0.524** | 1.000 | 1.003 |
+| JSON | 20 | **0.527** | 0.903 | 0.998 |
+| Chinese | 11 | **0.346** | 1.184 | 1.007 |
+| API keys, UUIDs, hashes | 30 | **0.388** | **0.378** | 1.003 |
+| English with emoji | 15 | 0.618 | **0.434** | 1.013 |
+| Japanese | 4 | 0.352 | 1.096 | 0.992 |
+| Korean | 4 | 0.449 | 1.092 | 1.061 |
+| Russian | 4 | 0.980 | 0.922 | 1.010 |
+
+Rerun it yourself with `npm install && npm run compare`
+([scripts/compare_estimators.mjs](scripts/compare_estimators.mjs), results in
+[results/estimator-comparison-o200k_base.json](results/estimator-comparison-o200k_base.json)).
+
+How to read this fairly:
+
+- tokenx is a good library. It is tiny and close on English and code. It undercounts random IDs and emoji by
+  more than half and JSON by about 10%, so it is the wrong pick if your prompts carry API payloads or logs.
+- The `estimate-tokens.js` column is in-sample: its weights were fitted on these same samples. Fitting on the
+  even rows and scoring only the odd rows gives blog 1.008, docs 1.017, code 1.001, CSV 0.999, JSON 0.985,
+  Chinese 1.015 and IDs 0.970. Japanese, Korean and Russian have four sentences each, and there the held-out
+  error is 6% to 12%.
+- All three are estimates. For billing, use the provider's own token count.
+
+## Use it
+
+```js
+import { estimateTokens } from "./estimate-tokens.js";
+
+estimateTokens('{"order_id": 48213, "total": 129.95, "currency": "USD"}'); // 22. The real o200k_base count is 22; characters ÷ 4 says 14.
+```
+
+It runs in Node, Deno, Bun and the browser. It needs Unicode property escapes in regular expressions, which every
+current runtime has. The weights are in the first lines of the file; refit them for another tokenizer with
+`python scripts/fit_estimator.py --encoding <name>`.
+
+## Characters per token, by content type
 
 | Content | Samples | Characters per token | Characters ÷ 4 gives you | Words per token |
 |---|---:|---:|---:|---:|
@@ -24,7 +73,8 @@ Chinese and Japanese come out at about 1.4.
 | Chinese | 11 | 1.37 | 0.34× | |
 | Japanese | 4 | 1.34 | 0.34× | |
 
-Full numbers, including the per-sample range, are in
+(This table divides total characters by total tokens without rounding each sample, so the ÷ 4 column differs
+from the comparison above in the second decimal.) Full numbers, including the per-sample range, are in
 [results/chars-per-token-o200k_base.json](results/chars-per-token-o200k_base.json). The write-up with a cost
 example is on the AICostBudget blog:
 [How Many Characters Is a Token? We Measured 10 Kinds of Text](https://aicostbudget.com/en/blog/how-many-characters-is-a-token).
@@ -36,13 +86,12 @@ example is on the AICostBudget blog:
 - JSON, CSV, logs and anything number-heavy: characters ÷ 2
 - API keys, hashes, base64, UUIDs: characters ÷ 1.5
 - Chinese or Japanese: characters × 0.73
-- 1,000 English words: about 1,240 tokens for everyday prose, about 1,530 for technical writing
+- How many tokens is 1,000 words? About 1,240 for everyday English prose, about 1,530 for technical writing
 
-## Estimating without a tokenizer
+## How the estimator works
 
-If you need a number in the browser or anywhere you can't load a tokenizer, count a few things separately
-and weight them. `scripts/fit_estimator.py` fits the weights with non-negative least squares, giving every
-category the same total weight:
+It counts a few things separately and weights them. `scripts/fit_estimator.py` fits the weights with
+non-negative least squares, giving every category the same total weight:
 
 ```
 tokens ≈ 0.91 × Latin words
@@ -58,17 +107,10 @@ tokens ≈ 0.91 × Latin words
        + 0.28 × other non-Latin letters (Cyrillic, Greek...)
 ```
 
-Estimate divided by the real count, after rounding each sample up:
-
-| blog | docs | code | CSV | JSON | Chinese | IDs | emoji | Japanese | Korean | Russian |
-|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1.016 | 1.012 | 0.999 | 1.003 | 0.998 | 1.007 | 1.003 | 1.013 | 0.992 | 1.061 | 1.010 |
-
-These are in-sample. Fitting on even rows and scoring odd rows gives similar numbers for the big categories
-(see [results/estimator-weights-o200k_base.json](results/estimator-weights-o200k_base.json)), but the odd
-rows come from the same sources, so this says the fit is not overfitted to individual samples, not that it
-works on every kind of text. The same weights run the free
-[AICostBudget Token Calculator](https://aicostbudget.com/en/token-calculator).
+The held-out check splits rows from the same sources, so it shows the fit is not overfitted to individual
+samples, not that it works on every kind of text. The same weights run the free
+[AICostBudget Token Calculator](https://aicostbudget.com/en/token-calculator), where you can paste text and see
+the estimate and its API cost per model.
 
 ## What's in the data
 
@@ -93,6 +135,7 @@ pip install -r requirements.txt
 python scripts/measure.py                          # results/chars-per-token-o200k_base.json
 python scripts/fit_estimator.py                    # results/estimator-weights-o200k_base.json
 python scripts/measure.py --encoding cl100k_base   # same samples, the older GPT-4 tokenizer
+npm install && npm run compare                     # results/estimator-comparison-o200k_base.json
 ```
 
 ## Limits
@@ -105,9 +148,14 @@ python scripts/measure.py --encoding cl100k_base   # same samples, the older GPT
   directional.
 - The technical docs are Python docstrings, which have more code names than most product documentation.
 
-If you run this on another tokenizer or add a content type, a pull request with the results file is welcome.
+If you run this on another tokenizer, add a content type or have a better estimator, a pull request with the results
+file is welcome. If the data saved you a budget surprise, a star helps other people find it.
+
+## Cite
+
+GitHub shows a "Cite this repository" button from [CITATION.cff](CITATION.cff).
 
 ## License
 
-Code (`scripts/`) is MIT. Data and results are CC BY 4.0, except the Python standard-library excerpts, which
+Code (`scripts/` and `estimate-tokens.js`) is MIT. Data and results are CC BY 4.0, except the Python standard-library excerpts, which
 stay under the PSF License. See [LICENSE-CODE](LICENSE-CODE) and [LICENSE-DATA](LICENSE-DATA).

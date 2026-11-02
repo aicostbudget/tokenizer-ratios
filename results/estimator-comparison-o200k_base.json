@@ -1,0 +1,86 @@
+{
+  "encoding": "o200k_base",
+  "versions": {
+    "js-tiktoken": "1.0.21",
+    "tokenx": "2.2.0"
+  },
+  "estimateOverActual": {
+    "blog": {
+      "samples": 416,
+      "tokens": 26783,
+      "chars/4": 1.25,
+      "tokenx": 1.048,
+      "estimate-tokens.js": 1.016
+    },
+    "docs": {
+      "samples": 354,
+      "tokens": 67241,
+      "chars/4": 1.097,
+      "tokenx": 1.031,
+      "estimate-tokens.js": 1.012
+    },
+    "code": {
+      "samples": 53,
+      "tokens": 31652,
+      "chars/4": 1.047,
+      "tokenx": 1.027,
+      "estimate-tokens.js": 0.999
+    },
+    "csv": {
+      "samples": 40,
+      "tokens": 54077,
+      "chars/4": 0.524,
+      "tokenx": 1,
+      "estimate-tokens.js": 1.003
+    },
+    "json": {
+      "samples": 20,
+      "tokens": 56274,
+      "chars/4": 0.527,
+      "tokenx": 0.903,
+      "estimate-tokens.js": 0.998
+    },
+    "zh": {
+      "samples": 11,
+      "tokens": 598,
+      "chars/4": 0.346,
+      "tokenx": 1.184,
+      "estimate-tokens.js": 1.007
+    },
+    "ids": {
+      "samples": 30,
+      "tokens": 12675,
+      "chars/4": 0.388,
+      "tokenx": 0.378,
+      "estimate-tokens.js": 1.003
+    },
+    "emoji": {
+      "samples": 15,
+      "tokens": 821,
+      "chars/4": 0.618,
+      "tokenx": 0.434,
+      "estimate-tokens.js": 1.013
+    },
+    "ja": {
+      "samples": 4,
+      "tokens": 125,
+      "chars/4": 0.352,
+      "tokenx": 1.096,
+      "estimate-tokens.js": 0.992
+    },
+    "ko": {
+      "samples": 4,
+      "tokens": 98,
+      "chars/4": 0.449,
+      "tokenx": 1.092,
+      "estimate-tokens.js": 1.061
+    },
+    "ru": {
+      "samples": 4,
+      "tokens": 102,
+      "chars/4": 0.98,
+      "tokenx": 0.922,
+      "estimate-tokens.js": 1.01
+    }
+  }
+}

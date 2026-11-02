@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use these samples, ratios or estimator weights, please cite them as below."
+title: "Tokenizer ratios: characters and words per token on OpenAI's o200k_base"
+abstract: "951 text samples (English prose, technical docs, Python source, CSV, JSON, random IDs, emoji, Chinese, Japanese, Korean and Russian) counted with OpenAI's o200k_base tokenizer, with characters and words per token by content type and fitted weights for estimating token counts without a tokenizer."
+authors:
+  - name: AICostBudget
+    website: "https://aicostbudget.com"
+repository-code: "https://github.com/aicostbudget/tokenizer-ratios"
+url: "https://aicostbudget.com/en/blog/how-many-characters-is-a-token"
+license:
+  - CC-BY-4.0
+  - MIT
+version: 1.0.0
+date-released: 2026-11-03
+keywords:
+  - tokenizer
+  - tiktoken
+  - o200k_base
+  - characters per token
+  - tokens per word
+  - token estimation
+  - LLM cost
