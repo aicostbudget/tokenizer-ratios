@@ -1,6 +1,6 @@
 // Estimate an OpenAI o200k_base token count (GPT-4o, GPT-4.1, o-series and newer) without a tokenizer.
 // Weights fitted on the 951 samples in https://github.com/aicostbudget/tokenizer-ratios (MIT).
-// Within about 2% on English prose, technical docs, code, CSV, JSON and Chinese; other tokenizers differ.
+// Within ~2% on this repo's samples, but ~11.5% low on unseen package.json files (see README). Other tokenizers differ.
 const W = { cjk: 0.73, otherLetter: 0.28, word: 0.91, longWordLetter: 0.22, shortWord: 0.33, capitalized: 0.62,
   camel: 1.41, digit: 0.66, punct: 0.56, symbol: 1.53, spaceRun: 1.24 };
 const CJK = /[぀-ヿ㐀-鿿가-힯豈-﫿　-〿＀-￯]/gu;

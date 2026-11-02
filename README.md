@@ -10,7 +10,8 @@ or price API calls with it, the JSON-heavy calls are the ones that blow your bud
 
 The good news: you don't need a tokenizer to do much better. [`estimate-tokens.js`](estimate-tokens.js) is a
 26-line function with no dependencies. Copy it into your project and it lands within about 2% of the real count
-on English, docs, code, CSV, JSON and Chinese.
+on the English, docs, code, CSV, JSON and Chinese samples below. On real files it had never seen it did worse:
+11.5% low on package.json files (see [results on unseen files](#results-on-files-it-never-saw)).
 
 ## Three estimators against the real count
 
@@ -44,6 +45,23 @@ How to read this fairly:
   Chinese 1.015 and IDs 0.970. Japanese, Korean and Russian have four sentences each, and there the held-out
   error is 6% to 12%.
 - All three are estimates. For billing, use the provider's own token count.
+
+## Results on files it never saw
+
+The table above is the test set the weights came from. To check against text none of the three had seen, we
+took the first 400 packages in a real `node_modules` folder and scored the first 4,000 characters of each
+README, package.json and index.js (2026-11-03):
+
+| File type | Files | characters ÷ 4 | tokenx 2.2.0 | estimate-tokens.js |
+|---|---:|---:|---:|---:|
+| README.md | 325 | 0.942 | 1.070 | 1.016 |
+| package.json | 338 | **0.711** | 0.986 | **0.885** |
+| index.js | 169 | 0.891 | 1.012 | 1.024 |
+
+On real package.json files (version strings like `^7.21.0`, scoped `@org/dashed-names`, deep indentation)
+`estimate-tokens.js` counts 11.5% low and tokenx is closer. If your payloads look like that, add a margin or use
+tokenx or a real tokenizer for them. Write-up, bundle sizes and the measurement script:
+[Don't trust your token estimator](https://aicostbudget.com/en/blog/token-estimator-accuracy).
 
 ## Use it
 
@@ -108,7 +126,7 @@ tokens ≈ 0.91 × Latin words
 ```
 
 The held-out check splits rows from the same sources, so it shows the fit is not overfitted to individual
-samples, not that it works on every kind of text. The same weights run the free
+samples, not that it works on every kind of text; the unseen-file results above show where it does not. The same weights run the free
 [AICostBudget Token Calculator](https://aicostbudget.com/en/token-calculator), where you can paste text and see
 the estimate and its API cost per model.
 
